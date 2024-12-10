@@ -37,7 +37,7 @@ namespace Eticaret.Prj.Controllers
             var model = new ProductDetailViewModel()
             {
                 Product = product,
-                RelatedProducts = (List<Product>)_context.Products.Where(p => p.IsActive && p.CategoryId == product.CategoryId && p.Id != product.Id)
+                RelatedProducts =_context.Products.Where(p => p.IsActive && p.CategoryId == product.CategoryId && p.Id != product.Id)
             };
             return View(model);
         }
