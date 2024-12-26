@@ -6,6 +6,7 @@ using Eticaret.Prj.Models.Entities;
 using Eticaret.Prj.Entities;
 
 
+
 namespace Eticaret.Prj.Database
 {
     public class DatabaseContext : DbContext
@@ -17,6 +18,7 @@ namespace Eticaret.Prj.Database
         public DbSet<News> News { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Slider> Sliders { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

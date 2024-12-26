@@ -4,6 +4,7 @@ using Eticaret.Prj.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eticaret.Prj.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241226165005_001")]
+    partial class _001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,14 +81,14 @@ namespace Eticaret.Prj.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2024, 12, 26, 20, 13, 48, 332, DateTimeKind.Local).AddTicks(8645),
+                            CreateDate = new DateTime(2024, 12, 26, 19, 50, 5, 444, DateTimeKind.Local).AddTicks(4664),
                             Email = "admin@gurkan.com",
                             IsActive = true,
                             IsAdmin = true,
                             Name = "AdminName",
                             Password = "123456*",
                             Surname = "AdminSurname",
-                            UserGuid = new Guid("f9273d40-6514-4073-b9cc-183c11afb38e"),
+                            UserGuid = new Guid("7096e936-f545-46c5-98c9-451e9f933180"),
                             UserName = "Admin"
                         });
                 });
@@ -133,7 +136,7 @@ namespace Eticaret.Prj.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2024, 12, 26, 20, 13, 48, 333, DateTimeKind.Local).AddTicks(184),
+                            CreateDate = new DateTime(2024, 12, 26, 19, 50, 5, 444, DateTimeKind.Local).AddTicks(6080),
                             IsActive = true,
                             IsTopMenu = true,
                             Name = "Elektronik",
@@ -143,7 +146,7 @@ namespace Eticaret.Prj.Migrations
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2024, 12, 26, 20, 13, 48, 333, DateTimeKind.Local).AddTicks(189),
+                            CreateDate = new DateTime(2024, 12, 26, 19, 50, 5, 444, DateTimeKind.Local).AddTicks(6085),
                             IsActive = true,
                             IsTopMenu = true,
                             Name = "Bilgisayar",
@@ -340,6 +343,26 @@ namespace Eticaret.Prj.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands");
+                });
+
+            modelBuilder.Entity("Eticaret.Prj.Models.Entities.Favorite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Favorites");
                 });
 
             modelBuilder.Entity("Eticaret.Prj.Entities.Product", b =>

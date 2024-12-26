@@ -4,6 +4,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Eticaret.Prj.Repositories;
 using Eticaret.Prj.Concrete;
+using Microsoft.AspNetCore.SignalR;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,9 @@ builder.Services.AddSession(options =>
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped(typeof(GenericRepository<>), typeof(Service<>));
 
+builder.Services.AddSignalR();
+builder.Services.AddControllersWithViews();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -41,6 +46,8 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -57,6 +64,7 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapHub<FavoritesHub>("/favoritesHub");
 
 app.MapControllerRoute(
            name: "admin",

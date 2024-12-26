@@ -554,6 +554,21 @@
                         <script src="/admin/assets/demo/chart-bar-demo.js"></script>
                         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
                         <script src="/admin/js/datatables-simple-demo.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
+                        <script>
+                            const connection = new signalR.HubConnectionBuilder()
+                                .withUrl("/favoritesHub")
+                                .build();
+
+                            connection.on("UpdateFavoriteCount", function (count) {
+                                document.getElementById("favorite-count").innerText = count;
+                            });
+
+                            connection.start().catch(function (err) {
+                                return console.error(err.toString());
+                            });
+                        </script>
+
                         
                         
                         }
