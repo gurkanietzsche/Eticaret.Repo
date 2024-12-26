@@ -1,13 +1,28 @@
 using Eticaret.Prj.Database;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Eticaret.Prj.Repositories;
+using Eticaret.Prj.Concrete;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".Eticaret.Session";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromDays(1);
+    options.IOTimeout = TimeSpan.FromMinutes(10); // NOT: IOTimeout yerine IdleTimeout kullanýlýyor olabilir.
+}
+);
+
 builder.Services.AddDbContext<DatabaseContext>();
+builder.Services.AddScoped(typeof(GenericRepository<>), typeof(Service<>));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -38,6 +53,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

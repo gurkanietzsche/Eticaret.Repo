@@ -1,25 +1,28 @@
-﻿using Eticaret.Prj.Database;
+﻿using Eticaret.Prj.Concrete;
+using Eticaret.Prj.Database;
+using Eticaret.Prj.Entities;
+using Eticaret.Prj.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eticaret.Prj.Controllers
 {
+    
     public class CategoriesController : Controller
     {
-        private readonly DatabaseContext _context;
-
-        public CategoriesController(DatabaseContext context)
+        private readonly GenericRepository<Category> _service;
+        public CategoriesController(GenericRepository<Category> service)
         {
-            _context = context;
+            _service = service;
         }
         public async Task<IActionResult> IndexAsync(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.Include(p => p.Products)
+            var category = await _service.GetQueryable().Include(p => p.Products)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {

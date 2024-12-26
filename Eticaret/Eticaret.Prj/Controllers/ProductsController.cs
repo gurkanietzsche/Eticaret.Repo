@@ -1,6 +1,7 @@
 ﻿using Eticaret.Prj.Database;
 using Eticaret.Prj.Entities;
 using Eticaret.Prj.Models;
+using Eticaret.Prj.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,25 +9,26 @@ namespace Eticaret.Prj.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly DatabaseContext _context;
+        private readonly GenericRepository<Product> _serviceProduct;
 
-        public ProductsController(DatabaseContext context)
+        public ProductsController(GenericRepository<Product> serviceProduct)
         {
-            _context = context;
+            _serviceProduct = serviceProduct;
         }
+
         public async Task<IActionResult> Index(string q = "")
         {
-            var databaseContext = _context.Products.Where(p=> p.IsActive && p.Name.Contains(q) || p.Description.Contains(q)).Include(p => p.Brand).Include(p => p.Category);
-            return View(await databaseContext.ToListAsync());
+            var databaseContext = _serviceProduct.GetAllAsync(p => p.IsActive && p.Name.Contains(q) || p.Description.Contains(q));
+            return View(await databaseContext);
         }
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products
+            var product = await _serviceProduct.GetQueryable()
                 .Include(p => p.Brand)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -37,7 +39,7 @@ namespace Eticaret.Prj.Controllers
             var model = new ProductDetailViewModel()
             {
                 Product = product,
-                RelatedProducts =_context.Products.Where(p => p.IsActive && p.CategoryId == product.CategoryId && p.Id != product.Id)
+                RelatedProducts = _serviceProduct.GetQueryable().Where(p => p.IsActive && p.CategoryId == product.CategoryId && p.Id != product.Id)
             };
             return View(model);
         }
